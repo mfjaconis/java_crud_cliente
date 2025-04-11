@@ -31,24 +31,26 @@ public class ClienteSetDAO implements IClienteDAO {
 
         if (clienteEncontrato != null) {
             this.set.remove(clienteEncontrato);
+            return true;
         }
         return false;
     }
 
     @Override
     public boolean alterar(Cliente cliente) {
-        if (this.set.contains(cliente)) {
-            for (Cliente clienteCadastrado : this.set) {
-                if (clienteCadastrado.equals(cliente)) {
-                    clienteCadastrado.setNome(cliente.getNome());
-                    clienteCadastrado.setTel(cliente.getTel());
-                    clienteCadastrado.setNumero(cliente.getNumero());
-                    clienteCadastrado.setEnd(cliente.getEnd());
-                    clienteCadastrado.setCidade(cliente.getCidade());
-                    clienteCadastrado.setEstado(cliente.getEstado());
-                    break;
-                }
-            }
+        Cliente clienteEncontrado = this.set.stream()
+                .filter(c -> c.getCpf().equals(cliente.getCpf()))
+                .findFirst()
+                .orElse(null);
+
+        if (clienteEncontrado != null) {
+            clienteEncontrado.setNome(cliente.getNome());
+            clienteEncontrado.setTel(cliente.getTel());
+            clienteEncontrado.setNumero(cliente.getNumero());
+            clienteEncontrado.setEnd(cliente.getEnd());
+            clienteEncontrado.setCidade(cliente.getCidade());
+            clienteEncontrado.setEstado(cliente.getEstado());
+            return true;
         }
         return false;
     }

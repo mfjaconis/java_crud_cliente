@@ -26,22 +26,27 @@ public class ClienteMapDAO implements IClienteDAO {
 
     @Override
     public boolean excluir(Long cpf) {
-        map.remove(cpf);
+        if (map.containsKey(cpf)) {
+            map.remove(cpf);
+            return true;
+        }
         return false;
     }
 
     @Override
     public boolean alterar(Cliente cliente) {
-        Cliente clienteCadastrado = map.get(cliente.getCpf());
-        if (clienteCadastrado != null) {
+        if (map.containsKey(cliente.getCpf())) {
+            System.out.println("Alterando cliente com CPF: " + cliente.getCpf());
+            Cliente clienteCadastrado = map.get(cliente.getCpf());
             clienteCadastrado.setNome(cliente.getNome());
             clienteCadastrado.setTel(cliente.getTel());
-            clienteCadastrado.setNumero(cliente.getNumero());
             clienteCadastrado.setEnd(cliente.getEnd());
+            clienteCadastrado.setNumero(cliente.getNumero());
             clienteCadastrado.setCidade(cliente.getCidade());
             clienteCadastrado.setEstado(cliente.getEstado());
+            return true;
         } else {
-            throw new IllegalArgumentException("Cliente não encontrado para alteração.");
+            System.out.println("Cliente com CPF: " + cliente.getCpf() + " não encontrado.");
         }
         return false;
     }
